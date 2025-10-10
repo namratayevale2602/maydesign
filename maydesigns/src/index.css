@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap");
+@import "tailwindcss";
+
+:root {
+  font-family: "Lato", sans-serif;
+
+  --skyBlue: #2274e0;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #fff;
+}
+
+.loader-letter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+*,
+::after,
+::before {
+  font-family: "Lato", sans-serif;
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
