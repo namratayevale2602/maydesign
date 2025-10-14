@@ -74,4 +74,55 @@ export const fetchRecentPostsAPI = async (excludeSlug = null, limit = 3) => {
   }
 };
 
+// Hero Projects API
+// Hero Projects API
+export const fetchHeroProjectAPI = async (params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`🔗 Fetching Hero Projects...`);
+    }
+    const response = await api.get("/hero-projects", { params });
+    return logResponse("/hero-projects", response.data);
+  } catch (error) {
+    return logError("/hero-projects", error);
+  }
+};
+
+export const fetchStatsAPI = async (params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`Fetching Stats...`);
+    }
+    const response = await api.get("/stats", { params });
+    return logResponse("/stats", response.data);
+  } catch (error) {
+    return logError("/stats", error);
+  }
+};
+
+// About Section API functions
+export const fetchAboutSectionAPI = async () => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`Fetching About Section...`);
+    }
+    const response = await api.get("/about-section");
+    return logResponse("/about-section", response.data);
+  } catch (error) {
+    return logError("/about-section", error);
+  }
+};
+
+export const fetchTestimonialsAPI = async (params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`Fetching Testimonials...`);
+    }
+    const response = await api.get("/testimonials", { params });
+    return logResponse("/testimonials", response.data);
+  } catch (error) {
+    return logError("/testimonials", error);
+  }
+};
+
 export default api;

@@ -36,6 +36,13 @@ const BlogDetailPage = () => {
     };
   }, [slug, fetchBlogDetail, fetchRecentPosts, clearBlogDetail]);
 
+  // Safe array for tags
+  const tagsArray = blogDetail?.tags
+    ? Array.isArray(blogDetail.tags)
+      ? blogDetail.tags
+      : [blogDetail.tags]
+    : [];
+
   if (blogDetailLoading) {
     return (
       <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
@@ -90,7 +97,7 @@ const BlogDetailPage = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto"
+          className="max-w-6xl mx-auto"
         >
           {/* Category and Metadata */}
           <div className="flex items-center justify-between mb-6">
@@ -121,21 +128,6 @@ const BlogDetailPage = () => {
             {blogDetail.excerpt}
           </p>
 
-          {/* Author Info */}
-          <div className="flex items-center space-x-4 mb-8 p-4 bg-white rounded-lg shadow-sm">
-            <img
-              src={blogDetail.author_image}
-              alt={blogDetail.author}
-              className="w-12 h-12 rounded-full"
-            />
-            <div>
-              <h4 className="font-semibold text-gray-900">
-                {blogDetail.author}
-              </h4>
-              <p className="text-gray-600 text-sm">{blogDetail.author_role}</p>
-            </div>
-          </div>
-
           {/* Featured Image */}
           <div className="mb-8 rounded-xl overflow-hidden">
             <img
@@ -151,12 +143,12 @@ const BlogDetailPage = () => {
             dangerouslySetInnerHTML={{ __html: blogDetail.content }}
           />
 
-          {/* Tags */}
-          {blogDetail.tags && blogDetail.tags.length > 0 && (
+          {/* Tags - Fixed with safe array */}
+          {tagsArray.length > 0 && (
             <div className="mb-8">
               <h3 className="font-semibold text-gray-900 mb-3">Tags:</h3>
               <div className="flex flex-wrap gap-2">
-                {blogDetail.tags.map((tag, index) => (
+                {tagsArray.map((tag, index) => (
                   <span
                     key={index}
                     className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
@@ -167,6 +159,21 @@ const BlogDetailPage = () => {
               </div>
             </div>
           )}
+
+          {/* Author Info */}
+          <div className="flex items-center space-x-4 mb-8 p-4 bg-white rounded-lg shadow-sm">
+            <img
+              src={blogDetail.author_image}
+              alt={blogDetail.author}
+              className="w-12 h-12 rounded-full"
+            />
+            <div>
+              <h4 className="font-semibold text-gray-900">
+                {blogDetail.author}
+              </h4>
+              <p className="text-gray-600 text-sm">{blogDetail.author_role}</p>
+            </div>
+          </div>
 
           {/* Share Buttons */}
           <div className="border-t border-b border-gray-200 py-6 mb-8">

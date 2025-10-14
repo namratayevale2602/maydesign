@@ -1,83 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaArrowRight, FaPlay, FaPause } from "react-icons/fa";
-
-// Hero projects data
-const heroProjects = [
-  {
-    id: 1,
-    title: "Modern Villa Design",
-    subtitle: "Architectural Excellence",
-    description:
-      "Luxurious residential villa with sustainable design principles and panoramic views",
-    image:
-      "https://plus.unsplash.com/premium_photo-1748065034969-67b26116835f?q=80&w=1662&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    thumbnail:
-      "https://plus.unsplash.com/premium_photo-1748065034969-67b26116835f?q=80&w=1662&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    service: "Architecture",
-    year: "2024",
-  },
-  {
-    id: 2,
-    title: "Urban Loft Transformation",
-    subtitle: "Interior Design",
-    description:
-      "Industrial chic loft conversion in downtown featuring smart home integration",
-    image:
-      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-    thumbnail:
-      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-    service: "Interior Design",
-    year: "2023",
-  },
-  {
-    id: 3,
-    title: "Zen Garden Oasis",
-    subtitle: "Landscape Design",
-    description:
-      "Serene outdoor space blending Japanese garden principles with modern amenities",
-    image:
-      "https://images.unsplash.com/photo-1560717789-0ac7c58ac90a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-    thumbnail:
-      "https://images.unsplash.com/photo-1560717789-0ac7c58ac90a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-    service: "Landscape Design",
-    year: "2024",
-  },
-  {
-    id: 4,
-    title: "Commercial Hub",
-    subtitle: "3D Visualization",
-    description:
-      "Futuristic office space visualization with interactive virtual tour capabilities",
-    image:
-      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-    thumbnail:
-      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-    service: "3D Visualization",
-    year: "2023",
-  },
-];
+import { useHeroProject } from "../../store/HeroProjectStore"; // Adjust path as needed
 
 const HeroSection = ({ onExploreClick }) => {
   const [activeProject, setActiveProject] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
+  // Use the Zustand store
+  const { heroProjects, loading, error, fetchHeroProjects, clearError } =
+    useHeroProject();
+
+  // Fetch hero projects on component mount using Axios through store
+  useEffect(() => {
+    fetchHeroProjects();
+  }, [fetchHeroProjects]);
+
   // Auto-rotate projects
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    if (!isAutoPlaying || heroProjects.length === 0) return;
 
     const interval = setInterval(() => {
       setActiveProject((prev) => (prev + 1) % heroProjects.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying]);
+  }, [isAutoPlaying, heroProjects.length]);
 
   const nextProject = () => {
+    if (heroProjects.length === 0) return;
     setActiveProject((prev) => (prev + 1) % heroProjects.length);
   };
 
   const prevProject = () => {
+    if (heroProjects.length === 0) return;
     setActiveProject(
       (prev) => (prev - 1 + heroProjects.length) % heroProjects.length
     );
@@ -87,8 +43,67 @@ const HeroSection = ({ onExploreClick }) => {
     setActiveProject(index);
   };
 
+  // Refresh data function
+  const handleRefresh = () => {
+    clearError();
+    fetchHeroProjects(true); // Force refresh
+  };
+
+  if (loading && heroProjects.length === 0) {
+    return (
+      <section className="relative h-screen pt-40 md:pt-80 flex items-center justify-center">
+        <div className="text-white text-xl">Loading featured projects...</div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="relative h-screen pt-40 md:pt-80 flex items-center justify-center">
+        <div className="text-white text-center max-w-md">
+          <div className="text-xl mb-4 text-red-300">
+            Failed to load projects
+          </div>
+          <div className="text-gray-300 mb-6 text-sm">{error}</div>
+          <div className="flex gap-4 justify-center">
+            <button
+              onClick={handleRefresh}
+              className="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold"
+            >
+              Try Again
+            </button>
+            <button
+              onClick={clearError}
+              className="px-6 py-3 border border-white text-white rounded-lg hover:bg-white hover:text-gray-900 transition-colors"
+            >
+              Use Cached Data
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (heroProjects.length === 0) {
+    return (
+      <section className="relative h-screen pt-40 md:pt-80 flex items-center justify-center">
+        <div className="text-white text-center">
+          <div className="text-xl mb-4">No featured projects available</div>
+          <button
+            onClick={handleRefresh}
+            className="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+          >
+            Refresh
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  const currentProject = heroProjects[activeProject];
+
   return (
-    <section className="relative h-screen  pt-40 md:pt-80 ">
+    <section className="relative h-screen pt-40 md:pt-80">
       {/* Background Images with Transition */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -99,7 +114,7 @@ const HeroSection = ({ onExploreClick }) => {
           transition={{ duration: 1.2, ease: "easeInOut" }}
           className="absolute inset-0 z-0"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${heroProjects[activeProject].image})`,
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${currentProject.image})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundAttachment: "fixed",
@@ -138,27 +153,25 @@ const HeroSection = ({ onExploreClick }) => {
                     style={{ backgroundColor: "#BE5103" }}
                   >
                     <span className="text-sm font-semibold uppercase tracking-wide">
-                      {heroProjects[activeProject].service}
+                      {currentProject.service}
                     </span>
                     <span className="mx-2">•</span>
-                    <span className="text-sm">
-                      {heroProjects[activeProject].year}
-                    </span>
+                    <span className="text-sm">{currentProject.year}</span>
                   </motion.div>
 
                   {/* Main Title */}
                   <h1 className="text-5xl md:text-7xl font-bold mb-4 leading-tight">
-                    {heroProjects[activeProject].title}
+                    {currentProject.title}
                   </h1>
 
                   {/* Subtitle */}
                   <p className="text-xl md:text-2xl text-gray-200 mb-8 font-light">
-                    {heroProjects[activeProject].subtitle}
+                    {currentProject.subtitle}
                   </p>
 
                   {/* Description */}
                   <p className="text-lg text-gray-300 mb-8 max-w-md">
-                    {heroProjects[activeProject].description}
+                    {currentProject.description}
                   </p>
 
                   {/* CTA Buttons */}
@@ -183,11 +196,35 @@ const HeroSection = ({ onExploreClick }) => {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-gray-900 transition-colors"
+                      onClick={handleRefresh}
+                      className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-gray-900 transition-colors flex items-center gap-2"
                     >
-                      View Portfolio
+                      {loading ? "Refreshing..." : "Refresh Data"}
+                      {loading && (
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{
+                            duration: 1,
+                            repeat: Infinity,
+                            ease: "linear",
+                          }}
+                          className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                        />
+                      )}
                     </motion.button>
                   </div>
+
+                  {/* Loading indicator for background refresh */}
+                  {loading && heroProjects.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="mt-4 flex items-center gap-2 text-gray-300"
+                    >
+                      <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+                      <span className="text-sm">Updating projects...</span>
+                    </motion.div>
+                  )}
                 </motion.div>
               </AnimatePresence>
             </motion.div>
@@ -210,6 +247,7 @@ const HeroSection = ({ onExploreClick }) => {
                     whileTap={{ scale: 0.9 }}
                     onClick={prevProject}
                     className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white border border-white/20"
+                    disabled={heroProjects.length <= 1}
                   >
                     ‹
                   </motion.button>
@@ -234,6 +272,7 @@ const HeroSection = ({ onExploreClick }) => {
                     whileTap={{ scale: 0.9 }}
                     onClick={nextProject}
                     className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white border border-white/20"
+                    disabled={heroProjects.length <= 1}
                   >
                     ›
                   </motion.button>
@@ -309,7 +348,7 @@ const HeroSection = ({ onExploreClick }) => {
               >
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-white font-semibold text-sm">
-                    {heroProjects[activeProject].title}
+                    {currentProject.title}
                   </h3>
                   <span
                     className="text-xs font-medium px-2 py-1 rounded"
@@ -318,11 +357,11 @@ const HeroSection = ({ onExploreClick }) => {
                       backgroundColor: "rgba(190, 81, 3, 0.2)",
                     }}
                   >
-                    {heroProjects[activeProject].year}
+                    {currentProject.year}
                   </span>
                 </div>
                 <p className="text-gray-300 text-xs">
-                  {heroProjects[activeProject].description}
+                  {currentProject.description}
                 </p>
               </motion.div>
             </motion.div>
