@@ -125,4 +125,28 @@ export const fetchTestimonialsAPI = async (params = {}) => {
   }
 };
 
+export const fetchPressAPI = async (params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`Fetching Press...`);
+    }
+    const response = await api.get("/press", { params });
+    return logResponse("/press", response.data);
+  } catch (error) {
+    return logError("/press", error);
+  }
+};
+
+export const fetchFeaturedPressAPI = async (params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`Fetching Featured Press...`);
+    }
+    const response = await api.get("/press/featured", { params });
+    return logResponse("/press/featured", response.data);
+  } catch (error) {
+    return logError("/press/featured", error);
+  }
+};
+
 export default api;

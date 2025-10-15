@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\HeroProjectController;
 use App\Http\Controllers\Api\StatController;
 use App\Http\Controllers\Api\AboutSectionController;
 use App\Http\Controllers\Api\TestimonialController;
+use App\Http\Controllers\Api\PressController;
 
 
 Route::prefix('api')->group(function () {
@@ -22,4 +23,11 @@ Route::prefix('api')->group(function () {
 
     Route::get('/testimonials', [TestimonialController::class, 'index']);
     Route::get('/featured', [TestimonialController::class, 'featured']);
+    Route::get('/press', [PressController::class, 'index']);
+    Route::get('/press/featured', [PressController::class, 'featured']);
+    Route::get('/press/{id}', [PressController::class, 'show']);
+    Route::get('/awards', [AwardController::class, 'index']);
+    Route::get('/awards/featured', [AwardController::class, 'featured']);
+    Route::get('/awards/years', [AwardController::class, 'years']);
+    Route::get('/awards/{id}', [AwardController::class, 'show']);
 });

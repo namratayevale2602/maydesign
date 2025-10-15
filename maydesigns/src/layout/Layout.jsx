@@ -42,33 +42,33 @@ const Layout = () => {
     <div className="min-h-screen flex flex-col">
       <ScrollToTop />
 
-      <Loader
+      {/* <Loader
         isLoading={isLoading}
         onLoadingComplete={handleLoadingComplete}
         text="MAY Designs"
         useVideo={true} // Enable video loader
-      >
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
+      > */}
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
 
-          {/* Smooth page transitions */}
-          <AnimatePresence mode="wait">
-            <motion.main
-              key={location.pathname}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="flex-1"
-            >
-              <Outlet />
-            </motion.main>
-          </AnimatePresence>
+        {/* Smooth page transitions */}
+        <AnimatePresence mode="wait">
+          <motion.main
+            key={location.pathname}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="flex-1"
+          >
+            <Outlet />
+          </motion.main>
+        </AnimatePresence>
 
-          <WhatsAppPopup />
-          <Footer />
-        </div>
-      </Loader>
+        <WhatsAppPopup />
+        <Footer />
+      </div>
+      {/* </Loader> */}
     </div>
   );
 };
