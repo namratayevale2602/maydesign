@@ -98,6 +98,21 @@ const Footer = () => {
 
   return (
     <footer className="bg-gray-900 text-white relative overflow-hidden">
+      {/* Custom Styles */}
+      <style jsx>{`
+        .bg-cream {
+          background-color: #fefaf6;
+        }
+        .text-burnt-orange {
+          color: #be5103;
+        }
+        .bg-burnt-orange {
+          background-color: #be5103;
+        }
+        .border-burnt-orange {
+          border-color: #be5103;
+        }
+      `}</style>
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div
@@ -120,7 +135,7 @@ const Footer = () => {
             transition={{ duration: 0.6 }}
             className="lg:col-span-1"
           >
-            <h3 className="text-2xl font-bold text-orange-400 mb-4">
+            <h3 className="text-2xl font-bold text-burnt-orange mb-4">
               {footerData.company.name}
             </h3>
             <p className="text-gray-300 mb-6 leading-relaxed">
@@ -157,7 +172,7 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <h4 className="text-lg font-semibold text-orange-300 mb-4">
+            <h4 className="text-lg font-semibold text-burnt-orange mb-4">
               Quick Links
             </h4>
             <ul className="space-y-2">
@@ -166,7 +181,7 @@ const Footer = () => {
                   <motion.a
                     href={link.href}
                     whileHover={{ x: 5, color: "#FB923C" }}
-                    className="text-gray-300 hover:text-orange-400 transition-colors block py-1"
+                    className="text-gray-300 hover:text-burnt-orange transition-colors block py-1"
                   >
                     {link.name}
                   </motion.a>
@@ -182,7 +197,7 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h4 className="text-lg font-semibold text-orange-300 mb-4">
+            <h4 className="text-lg font-semibold text-burnt-orange mb-4">
               Our Services
             </h4>
             <ul className="space-y-2">
@@ -191,7 +206,7 @@ const Footer = () => {
                   <motion.a
                     href={service.href}
                     whileHover={{ x: 5, color: "#FB923C" }}
-                    className="text-gray-300 hover:text-orange-400 transition-colors block py-1"
+                    className="text-gray-300 hover:text-burnt-orange transition-colors block py-1"
                   >
                     {service.name}
                   </motion.a>
@@ -207,12 +222,12 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <h4 className="text-lg font-semibold text-orange-300 mb-4">
+            <h4 className="text-lg font-semibold text-burnt-orange mb-4">
               Contact Info
             </h4>
             <div className="space-y-3">
               <div className="flex items-start space-x-3">
-                <FaMapMarkerAlt className="h-5 w-5 text-orange-400 mt-0.5 flex-shrink-0" />
+                <FaMapMarkerAlt className="h-5 w-5 text-burnt-orange mt-0.5 flex-shrink-0" />
                 <div>
                   {footerData.contact.address.map((line, index) => (
                     <p key={index} className="text-gray-300 text-sm">
@@ -223,27 +238,27 @@ const Footer = () => {
               </div>
 
               <div className="flex items-center space-x-3">
-                <FaPhone className="h-5 w-5 text-orange-400" />
+                <FaPhone className="h-5 w-5 text-burnt-orange" />
                 <a
                   href={`tel:${footerData.contact.phone}`}
-                  className="text-gray-300 hover:text-orange-400 transition-colors"
+                  className="text-gray-300 hover:text-burnt-orange transition-colors"
                 >
                   {footerData.contact.phone}
                 </a>
               </div>
 
               <div className="flex items-center space-x-3">
-                <FaEnvelope className="h-5 w-5 text-orange-400" />
+                <FaEnvelope className="h-5 w-5 text-burnt-orange" />
                 <a
                   href={`mailto:${footerData.contact.email}`}
-                  className="text-gray-300 hover:text-orange-400 transition-colors"
+                  className="text-gray-300 hover:text-burnt-orange transition-colors"
                 >
                   {footerData.contact.email}
                 </a>
               </div>
 
               <div className="flex items-start space-x-3">
-                <FaClock className="h-5 w-5 text-orange-400 mt-0.5 flex-shrink-0" />
+                <FaClock className="h-5 w-5 text-burnt-orange mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-gray-300 text-sm">
                     {footerData.contact.hours.office}
@@ -263,7 +278,7 @@ const Footer = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg p-8 mb-12"
+          className="bg-burnt-orange rounded-lg p-8 mb-12"
         >
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="mb-4 md:mb-0 md:mr-6">
@@ -279,7 +294,7 @@ const Footer = () => {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="px-4 py-3 rounded-l-lg w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-orange-300"
+                className="px-4 py-3 rounded-l-lg w-full md:w-64 border border-orange-50 focus:ring-2 focus:ring-burnt-orange"
               />
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -307,21 +322,21 @@ const Footer = () => {
             <motion.a
               href="/privacy"
               whileHover={{ color: "#FB923C" }}
-              className="hover:text-orange-400 transition-colors"
+              className="hover:text-burnt-orange transition-colors"
             >
               Privacy Policy
             </motion.a>
             <motion.a
               href="/terms"
               whileHover={{ color: "#FB923C" }}
-              className="hover:text-orange-400 transition-colors"
+              className="hover:text-burnt-orange transition-colors"
             >
               Terms of Service
             </motion.a>
             <motion.a
               href="/sitemap"
               whileHover={{ color: "#FB923C" }}
-              className="hover:text-orange-400 transition-colors"
+              className="hover:text-burnt-orange transition-colors"
             >
               Sitemap
             </motion.a>

@@ -29,7 +29,7 @@ const interiorProjects = [
 
 const InteriorPage = () => {
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen pt-20">
       <section className="bg-white py-20">
         <div className="container mx-auto px-6">
           <motion.div
@@ -55,13 +55,13 @@ const InteriorPage = () => {
           <div className="flex justify-center space-x-8">
             <Link
               to="/projects/interior/residential"
-              className="text-lg font-semibold text-gray-700 hover:text-orange-500 transition-colors"
+              className="text-lg font-semibold text-gray-700 hover:text-burnt-orange transition-colors"
             >
               Residential
             </Link>
             <Link
               to="/projects/interior/commercial"
-              className="text-lg font-semibold text-gray-700 hover:text-orange-500 transition-colors"
+              className="text-lg font-semibold text-gray-700 hover:text-burnt-orange transition-colors"
             >
               Commercial
             </Link>
@@ -104,12 +104,12 @@ const ProjectCard = ({ project, index }) => {
 
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-orange-500 uppercase tracking-wide">
+          <span className="text-sm font-medium text-burnt-orange uppercase tracking-wide">
             {project.type}
           </span>
         </div>
 
-        <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-orange-500 transition-colors">
+        <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-burnt-orange transition-colors">
           {project.name}
         </h3>
 
@@ -117,7 +117,7 @@ const ProjectCard = ({ project, index }) => {
 
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-500">{project.location}</span>
-          <button className="text-orange-500 hover:text-orange-600 font-semibold text-sm">
+          <button className="text-burnt-orange hover:text-orange-600 font-semibold text-sm">
             View Details
           </button>
         </div>

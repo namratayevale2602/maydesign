@@ -163,6 +163,21 @@ const Projects = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
+      {/* Custom Styles */}
+      <style jsx>{`
+        .bg-cream {
+          background-color: #fefaf6;
+        }
+        .text-burnt-orange {
+          color: #be5103;
+        }
+        .bg-burnt-orange {
+          background-color: #be5103;
+        }
+        .border-burnt-orange {
+          border-color: #be5103;
+        }
+      `}</style>
       {/* Header */}
       <section className="bg-white py-20">
         <div className="container mx-auto px-6">
@@ -196,7 +211,7 @@ const Projects = () => {
                 placeholder="Search projects..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent w-64"
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-burnt-orange focus:border-transparent w-64"
               />
             </div>
 
@@ -208,7 +223,7 @@ const Projects = () => {
                   onClick={() => setFilter(category.id)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center space-x-2 ${
                     filter === category.id
-                      ? "bg-orange-500 text-white shadow-lg"
+                      ? "bg-burnt-orange text-white shadow-lg"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
@@ -226,7 +241,7 @@ const Projects = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-burnt-orange focus:border-transparent"
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
@@ -238,7 +253,7 @@ const Projects = () => {
                   onClick={() => setViewMode("grid")}
                   className={`p-2 rounded-lg transition-colors ${
                     viewMode === "grid"
-                      ? "bg-white text-orange-500 shadow-sm"
+                      ? "bg-white text-burnt-orange shadow-sm"
                       : "text-gray-600"
                   }`}
                 >
@@ -248,7 +263,7 @@ const Projects = () => {
                   onClick={() => setViewMode("list")}
                   className={`p-2 rounded-lg transition-colors ${
                     viewMode === "list"
-                      ? "bg-white text-orange-500 shadow-sm"
+                      ? "bg-white text-burnt-orange shadow-sm"
                       : "text-gray-600"
                   }`}
                 >
@@ -296,7 +311,7 @@ const Projects = () => {
                   setFilter("all");
                   setSearchTerm("");
                 }}
-                className="text-orange-500 hover:text-orange-600 font-semibold"
+                className="text-burnt-orange hover:text-orange-600 font-semibold"
               >
                 Clear filters and try again
               </button>
@@ -330,7 +345,7 @@ const Projects = () => {
                     <p className="text-gray-600 mb-4">
                       {category.count} projects
                     </p>
-                    <div className="flex items-center justify-center text-orange-500 font-semibold">
+                    <div className="flex items-center justify-center text-burnt-orange font-semibold">
                       <span>Explore</span>
                       <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                     </div>
@@ -359,7 +374,7 @@ const ProjectCard = ({ project, index }) => {
           className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
         />
         {project.featured && (
-          <div className="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+          <div className="absolute top-4 left-4 bg-burnt-orange text-white px-3 py-1 rounded-full text-sm font-semibold">
             Featured
           </div>
         )}
@@ -375,11 +390,11 @@ const ProjectCard = ({ project, index }) => {
 
       <div className="p-6">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-xl font-bold text-gray-900 group-hover:text-orange-500 transition-colors">
+          <h3 className="text-xl font-bold text-gray-900 group-hover:text-burnt-orange transition-colors">
             {project.name}
           </h3>
           {project.awards.length > 0 && (
-            <span className="text-orange-500 text-sm">★ Awarded</span>
+            <span className="text-burnt-orange text-sm">★ Awarded</span>
           )}
         </div>
 
@@ -405,7 +420,7 @@ const ProjectCard = ({ project, index }) => {
           </span>
           <Link
             to={`/projects/${project.id}`}
-            className="text-orange-500 hover:text-orange-600 font-semibold text-sm flex items-center group/link"
+            className="text-burnt-orange hover:text-orange-600 font-semibold text-sm flex items-center group/link"
           >
             View Details
             <FiArrowRight className="ml-1 group-hover/link:translate-x-1 transition-transform" />
@@ -432,7 +447,7 @@ const ProjectListItem = ({ project, index }) => {
             className="w-full h-48 md:h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
           />
           {project.featured && (
-            <div className="absolute top-3 left-3 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+            <div className="absolute top-3 left-3 bg-burnt-orange text-white px-2 py-1 rounded-full text-xs font-semibold">
               Featured
             </div>
           )}
@@ -441,20 +456,20 @@ const ProjectListItem = ({ project, index }) => {
         <div className="flex-1">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-4">
-              <span className="text-sm font-medium text-orange-500 uppercase tracking-wide">
+              <span className="text-sm font-medium text-burnt-orange uppercase tracking-wide">
                 {project.category}
               </span>
               <span className="text-gray-500 text-sm">{project.year}</span>
             </div>
             {project.awards.length > 0 && (
-              <div className="flex items-center text-orange-500 text-sm">
+              <div className="flex items-center text-burnt-orange text-sm">
                 <span className="mr-1">★</span>
                 <span>Award Winning</span>
               </div>
             )}
           </div>
 
-          <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-orange-500 transition-colors">
+          <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-burnt-orange transition-colors">
             {project.name}
           </h3>
 
@@ -480,7 +495,7 @@ const ProjectListItem = ({ project, index }) => {
             </div>
             <Link
               to={`/projects/${project.id}`}
-              className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors font-semibold flex items-center group/link"
+              className="bg-burnt-orange text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors font-semibold flex items-center group/link"
             >
               Explore Project
               <FiArrowRight className="ml-2 group-hover/link:translate-x-1 transition-transform" />

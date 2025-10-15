@@ -1,3 +1,4 @@
+// layout/Layout.js (alternative approach)
 import React, { useState, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,28 +7,28 @@ import Footer from "../components/Footer/Footer";
 import WhatsAppPopup from "../components/PopUp/WhatsAppPopup";
 import ScrollToTop from "../components/ScrollToTop/ScrollToTop";
 import Loader from "../components/Loader/Loader";
+import ProjectsSidebar from "../components/ProjectsSidebar/ProjectsSidebar";
 
 const Layout = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const location = useLocation();
 
-  useEffect(() => {
-    // Only show loader for initial load and home page
-    if (isInitialLoad && location.pathname === "/") {
-      setIsLoading(true);
+  // Check if current route is a project route
+  const isProjectRoute = location.pathname.startsWith("/projects");
+  // Check if current route is the index page
+  const isIndexPage = location.pathname === "/";
 
-      // For video loader, we'll let the video duration control the timing
-      // Set a maximum timeout as fallback (adjust based on your video length)
-      const videoDuration = 5000; // 5 seconds as fallback
+  useEffect(() => {
+    // Only apply loading logic for index page
+    if (isIndexPage) {
       const timer = setTimeout(() => {
         setIsLoading(false);
-        setIsInitialLoad(false);
-      }, videoDuration);
+      }, 2000); // Adjust timing as needed
 
       return () => clearTimeout(timer);
     } else {
-      // For other pages or after initial load, don't show loader
+      // For non-index pages, skip loading immediately
       setIsLoading(false);
       setIsInitialLoad(false);
     }
@@ -42,33 +43,41 @@ const Layout = () => {
     <div className="min-h-screen flex flex-col">
       <ScrollToTop />
 
-      {/* <Loader
+      {/* Only wrap with Loader for index page */}
+      <Loader
         isLoading={isLoading}
         onLoadingComplete={handleLoadingComplete}
         text="MAY Designs"
-        useVideo={true} // Enable video loader
-      > */}
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
+        useVideo={true}
+      >
+        <div className="flex flex-col min-h-screen">
+          <Navbar />
 
-        {/* Smooth page transitions */}
-        <AnimatePresence mode="wait">
-          <motion.main
-            key={location.pathname}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="flex-1"
-          >
-            <Outlet />
-          </motion.main>
-        </AnimatePresence>
+          {/* Conditionally render sidebar and main content */}
+          <div className="flex flex-1 ">
+            {/* Show sidebar only for project routes */}
+            {isProjectRoute && <ProjectsSidebar />}
 
-        <WhatsAppPopup />
-        <Footer />
-      </div>
-      {/* </Loader> */}
+            <div className="flex-1">
+              <AnimatePresence mode="wait">
+                <motion.main
+                  key={location.pathname}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="h-full"
+                >
+                  <Outlet />
+                </motion.main>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          <WhatsAppPopup />
+          <Footer />
+        </div>
+      </Loader>
     </div>
   );
 };

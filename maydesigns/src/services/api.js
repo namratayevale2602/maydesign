@@ -149,4 +149,41 @@ export const fetchFeaturedPressAPI = async (params = {}) => {
   }
 };
 
+// Awards API
+export const fetchAwardsAPI = async (params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`🏆 Fetching Awards...`, params);
+    }
+    const response = await api.get("/awards", { params });
+    return logResponse("/awards", response.data);
+  } catch (error) {
+    return logError("/awards", error);
+  }
+};
+
+export const fetchFeaturedAwardsAPI = async (params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`🏆 Fetching Featured Awards...`);
+    }
+    const response = await api.get("/awards/featured", { params });
+    return logResponse("/awards/featured", response.data);
+  } catch (error) {
+    return logError("/awards/featured", error);
+  }
+};
+
+export const fetchAwardYearsAPI = async () => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`📅 Fetching Award Years...`);
+    }
+    const response = await api.get("/awards/years");
+    return logResponse("/awards/years", response.data);
+  } catch (error) {
+    return logError("/awards/years", error);
+  }
+};
+
 export default api;

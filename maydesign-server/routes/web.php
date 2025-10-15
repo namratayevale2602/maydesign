@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\StatController;
 use App\Http\Controllers\Api\AboutSectionController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\PressController;
+use App\Http\Controllers\Api\AwardController;
+use App\Http\Controllers\Api\ProjectCategoryController;
 
 
 Route::prefix('api')->group(function () {
@@ -30,4 +32,13 @@ Route::prefix('api')->group(function () {
     Route::get('/awards/featured', [AwardController::class, 'featured']);
     Route::get('/awards/years', [AwardController::class, 'years']);
     Route::get('/awards/{id}', [AwardController::class, 'show']);
+    Route::get('/projects', [ProjectCategoryController::class, 'index']);
+Route::get('/projects/featured', [ProjectCategoryController::class, 'featured']);
+Route::get('/projects/categories', [ProjectCategoryController::class, 'categories']);
+Route::get('/projects/{slug}', [ProjectCategoryController::class, 'show']);
+
+// Category-based project routes
+Route::get('/projects/category/{category}', [ProjectCategoryController::class, 'byCategory']);
+Route::get('/projects/category/{category}/types', [ProjectCategoryController::class, 'categoryTypes']);
+Route::get('/projects/interior/{type}', [ProjectCategoryController::class, 'interiorByType']);
 });

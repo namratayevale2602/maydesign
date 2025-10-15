@@ -1,7 +1,5 @@
-// AboutUsPage.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { fadeIn, staggerContainer, zoomIn } from "../../../utils/motion";
 import CountUp from "react-countup";
 import {
   Users,
@@ -17,7 +15,56 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Star,
+  ArrowRight,
 } from "lucide-react";
+import ZigzagImageTimeline from "./ZigzagTimeline";
+
+// Motion variants
+const fadeIn = (direction, type, delay, duration) => ({
+  hidden: {
+    x: direction === "left" ? 100 : direction === "right" ? -100 : 0,
+    y: direction === "up" ? 100 : direction === "down" ? -100 : 0,
+    opacity: 0,
+  },
+  show: {
+    x: 0,
+    y: 0,
+    opacity: 1,
+    transition: {
+      type,
+      delay,
+      duration,
+      ease: "easeOut",
+    },
+  },
+});
+
+const staggerContainer = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const zoomIn = (delay, duration) => ({
+  hidden: {
+    scale: 0,
+    opacity: 0,
+  },
+  show: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      delay,
+      duration,
+      ease: "easeOut",
+    },
+  },
+});
 
 const AboutUsPage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -209,138 +256,125 @@ const AboutUsPage = () => {
       title: "Sustainability",
       description:
         "We prioritize eco-friendly materials and energy-efficient designs in every project.",
-      color: "from-green-500 to-emerald-600",
     },
     {
       icon: Lightbulb,
       title: "Innovation",
       description:
         "Constantly pushing boundaries with new technologies and creative design solutions.",
-      color: "from-yellow-500 to-orange-500",
     },
     {
       icon: HeartHandshake,
       title: "Collaboration",
       description:
         "Working closely with clients to bring their unique vision to life.",
-      color: "from-blue-500 to-cyan-500",
     },
     {
       icon: Target,
       title: "Excellence",
       description:
         "Committed to delivering exceptional quality in every detail of our work.",
-      color: "from-purple-500 to-pink-500",
     },
   ];
 
-  // Road Timeline Component
-  const RoadTimeline = () => {
+  // Zigzag Timeline Component
+  const ZigzagTimeline = () => {
     return (
       <div className="relative py-20">
-        {/* Road Container */}
-        <div className="relative max-w-6xl mx-auto">
-          {/* Main Road Path */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-2 h-full bg-gradient-to-b from-gray-300 to-gray-400 rounded-lg shadow-2xl">
-            {/* Road Center Line */}
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2 w-1 h-8 bg-yellow-400 rounded-full shadow-lg animate-pulse"
-              style={{ animationDelay: "0.5s" }}
-            ></div>
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2 w-1 h-8 bg-yellow-400 rounded-full shadow-lg animate-pulse top-1/4"
-              style={{ animationDelay: "1s" }}
-            ></div>
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2 w-1 h-8 bg-yellow-400 rounded-full shadow-lg animate-pulse top-2/4"
-              style={{ animationDelay: "1.5s" }}
-            ></div>
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2 w-1 h-8 bg-yellow-400 rounded-full shadow-lg animate-pulse top-3/4"
-              style={{ animationDelay: "2s" }}
-            ></div>
-          </div>
-
-          {/* Road Side Lines */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 -ml-12 w-6 h-full border-l-4 border-r-4 border-gray-200 border-dashed"></div>
-          <div className="absolute left-1/2 transform -translate-x-1/2 ml-12 w-6 h-full border-l-4 border-r-4 border-gray-200 border-dashed"></div>
-
-          {/* Timeline Items */}
-          {timelineData.map((item, index) => {
-            const isEven = index % 2 === 0;
-            const positionClass = isEven ? "left-0" : "right-0";
-            const translateClass = isEven
-              ? "translate-x-[-100%]"
-              : "translate-x-[100%]";
-
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: isEven ? -100 : 100 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                viewport={{ once: true, margin: "-100px" }}
-                className={`absolute ${positionClass} w-1/2 px-8`}
-                style={{ top: `${(index / (timelineData.length - 1)) * 100}%` }}
-              >
-                {/* Content Card */}
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Main Timeline Container */}
+          <div className="relative">
+            {/* Vertical Center Line */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-burnt-orange/40 via-burnt-orange/60 to-burnt-orange/40 rounded-lg hidden lg:block">
+              {/* Animated dots on the line */}
+              {timelineData.map((_, index) => (
                 <motion.div
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  onClick={() => setSelectedTimelineItem(item)}
-                  className={`bg-white rounded-2xl shadow-2xl p-6 cursor-pointer group border-2 border-transparent hover:border-burnt-orange transition-all duration-300 ${
-                    isEven ? "ml-auto mr-4" : "mr-auto ml-4"
-                  } max-w-md`}
+                  key={index}
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  transition={{ delay: index * 0.2 + 0.5 }}
+                  className="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-cream border-4 border-burnt-orange rounded-full shadow-lg flex items-center justify-center"
+                  style={{
+                    top: `${(index / (timelineData.length - 1)) * 100}%`,
+                  }}
                 >
-                  {/* Year Marker on Road */}
-                  <div
-                    className={`absolute top-1/2 transform -translate-y-1/2 ${
-                      isEven
-                        ? "right-0 translate-x-1/2"
-                        : "left-0 -translate-x-1/2"
-                    }`}
-                  >
-                    <motion.div
-                      whileHover={{ scale: 1.2 }}
-                      className="w-12 h-12 bg-gradient-to-br from-burnt-orange to-orange-500 rounded-full flex items-center justify-center shadow-2xl border-4 border-white"
-                    >
-                      <span className="text-white font-bold text-sm">
-                        {item.year}
-                      </span>
-                    </motion.div>
-                  </div>
+                  <Star className="w-3 h-3 text-burnt-orange fill-current" />
+                </motion.div>
+              ))}
+            </div>
 
-                  {/* Content */}
-                  <div className="flex items-start mb-4">
-                    <span className="text-3xl mr-4">{item.icon}</span>
+            {/* Timeline Items */}
+            {timelineData.map((item, index) => {
+              const isEven = index % 2 === 0;
+              const positionClass = isEven
+                ? "lg:pr-8 lg:pl-0"
+                : "lg:pl-8 lg:pr-0";
+              const flexDirection = isEven
+                ? "lg:flex-row"
+                : "lg:flex-row-reverse";
+
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.2 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  className={`flex flex-col ${flexDirection} items-center lg:items-stretch gap-8 mb-16 lg:mb-24 ${positionClass}`}
+                >
+                  {/* Content Card */}
+                  <motion.div
+                    whileHover={{ scale: 1.02, y: -5 }}
+                    onClick={() => setSelectedTimelineItem(item)}
+                    className="bg-white rounded-2xl shadow-lg p-6 cursor-pointer group border-2 border-transparent hover:border-burnt-orange transition-all duration-300 flex-1 max-w-2xl w-full"
+                  >
+                    {/* Year Badge */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="bg-burnt-orange text-white px-4 py-2 rounded-lg font-bold text-sm">
+                        {item.year}
+                      </div>
+                      <div className="text-2xl">{item.icon}</div>
+                    </div>
+
+                    {/* Content */}
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-burnt-orange transition-colors">
+                      <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-burnt-orange transition-colors">
                         {item.title}
                       </h3>
-                      <p className="text-gray-600 text-sm mt-2 leading-relaxed">
+                      <p className="text-gray-600 leading-relaxed mb-4">
                         {item.description}
                       </p>
                     </div>
-                  </div>
 
-                  <div className="flex items-center text-burnt-orange text-sm font-semibold">
-                    <span>Explore Milestone</span>
-                    <ChevronRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />
-                  </div>
+                    {/* Explore Button */}
+                    <div className="flex items-center justify-between pt-4 border-t border-cream">
+                      <div className="flex items-center text-burnt-orange font-semibold text-sm group-hover:text-burnt-orange/80 transition-colors">
+                        <span>Explore Milestone</span>
+                        <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
+                      </div>
+                      <div className="text-xs text-gray-500 bg-cream px-2 py-1 rounded">
+                        {index + 1} of {timelineData.length}
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Image */}
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    className="flex-1 max-w-2xl w-full"
+                  >
+                    <div className="relative rounded-2xl overflow-hidden shadow-lg h-64 lg:h-80">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Start and End Road Signs */}
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-4">
-          <div className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-2xl font-bold text-sm">
-            START 2008
-          </div>
-        </div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-4">
-          <div className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-2xl font-bold text-sm">
-            CURRENT 2023
+              );
+            })}
           </div>
         </div>
       </div>
@@ -353,67 +387,67 @@ const AboutUsPage = () => {
       whileInView="show"
       viewport={{ once: true }}
       variants={staggerContainer}
-      className="min-h-screen bg-white"
+      className="min-h-screen bg-cream"
     >
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-burnt-orange/10 to-cream">
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
             alt="Architectural Excellence"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-20"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-burnt-orange/90 to-gray-900/90"></div>
         </div>
 
         <motion.div
           variants={fadeIn("up", "spring", 0.5, 1)}
-          className="relative text-center text-white px-4 max-w-6xl"
+          className="relative text-center px-4 max-w-6xl"
         >
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Shaping Spaces,
-            <br />
-            Creating Legacies
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
+          <div className="mb-8">
+            <div className="w-24 h-1 bg-burnt-orange mx-auto mb-6"></div>
+            <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-6 leading-tight">
+              Crafting Spaces,
+              <br />
+              <span className="text-burnt-orange">Building Legacies</span>
+            </h1>
+          </div>
+          <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
             15 years of architectural excellence, innovation, and sustainable
             design that transforms visions into reality
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-white text-[#BE5103] px-8 py-4 rounded-lg text-lg font-semibold transition-colors hover:bg-gray-100 shadow-2xl"
+            className="bg-burnt-orange text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 hover:bg-burnt-orange/90 shadow-lg hover:shadow-xl"
           >
             Explore Our Portfolio
           </motion.button>
         </motion.div>
       </section>
 
-      {/* Story Section with Road Timeline */}
+      {/* Story Section with Zigzag Timeline */}
       <section
         ref={timelineRef}
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 relative overflow-hidden"
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-white"
       >
         <div className="max-w-7xl mx-auto">
-          <motion.div
+          {/* <motion.div
             variants={fadeIn("up", "spring", 0.3, 1)}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Our Journey
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+              Our Journey Through Time
             </h2>
             <div className="w-24 h-1 bg-burnt-orange mx-auto mb-6"></div>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Follow our path from humble beginnings to international
-              recognition. Each milestone represents our commitment to
-              architectural excellence and innovation.
+              A timeline of innovation and growth. Each milestone represents our
+              commitment to pushing the boundaries of architectural excellence.
             </p>
-          </motion.div>
+          </motion.div> */}
 
-          {/* Road Timeline */}
-          <div className="relative h-[1200px]">
-            <RoadTimeline />
-          </div>
+          {/* Zigzag Timeline */}
+          {/* <ZigzagTimeline /> */}
+          <ZigzagImageTimeline />
         </div>
       </section>
 
@@ -458,7 +492,7 @@ const AboutUsPage = () => {
                       <h2 className="text-3xl font-bold">
                         {selectedTimelineItem.title}
                       </h2>
-                      <div className="text-2xl font-semibold text-orange-300">
+                      <div className="text-2xl font-semibold text-orange-200">
                         {selectedTimelineItem.year}
                       </div>
                     </div>
@@ -475,7 +509,7 @@ const AboutUsPage = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Achievements */}
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
                       <Award className="text-burnt-orange mr-3" size={24} />
                       Key Achievements
                     </h3>
@@ -487,7 +521,7 @@ const AboutUsPage = () => {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: idx * 0.1 }}
-                            className="flex items-start bg-orange-50 rounded-lg p-4"
+                            className="flex items-start bg-cream rounded-lg p-4 border-l-4 border-burnt-orange"
                           >
                             <div className="bg-burnt-orange rounded-full p-1 mr-3 mt-1 flex-shrink-0">
                               <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -501,11 +535,11 @@ const AboutUsPage = () => {
 
                   {/* Impact */}
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
                       <Target className="text-burnt-orange mr-3" size={24} />
                       Impact & Legacy
                     </h3>
-                    <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-6 border-l-4 border-burnt-orange">
+                    <div className="bg-cream rounded-xl p-6 border-l-4 border-burnt-orange">
                       <p className="text-gray-700 text-lg leading-relaxed">
                         {selectedTimelineItem.details.impact}
                       </p>
@@ -514,7 +548,7 @@ const AboutUsPage = () => {
                 </div>
 
                 {/* Navigation */}
-                <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-200">
+                <div className="flex justify-between items-center mt-8 pt-6 border-t border-cream">
                   <button
                     onClick={() => {
                       const currentIndex = timelineData.findIndex(
@@ -526,7 +560,7 @@ const AboutUsPage = () => {
                           : timelineData.length - 1;
                       setSelectedTimelineItem(timelineData[prevIndex]);
                     }}
-                    className="flex items-center text-burnt-orange font-semibold hover:text-orange-700 transition-colors px-4 py-2 rounded-lg hover:bg-orange-50"
+                    className="flex items-center text-burnt-orange font-semibold hover:text-burnt-orange/80 transition-colors px-4 py-2 rounded-lg hover:bg-cream"
                   >
                     <ChevronLeft className="w-5 h-5 mr-2" />
                     Previous
@@ -550,7 +584,7 @@ const AboutUsPage = () => {
                           : 0;
                       setSelectedTimelineItem(timelineData[nextIndex]);
                     }}
-                    className="flex items-center text-burnt-orange font-semibold hover:text-orange-700 transition-colors px-4 py-2 rounded-lg hover:bg-orange-50"
+                    className="flex items-center text-burnt-orange font-semibold hover:text-burnt-orange/80 transition-colors px-4 py-2 rounded-lg hover:bg-cream"
                   >
                     Next
                     <ChevronRight className="w-5 h-5 ml-2" />
@@ -563,7 +597,7 @@ const AboutUsPage = () => {
       </AnimatePresence>
 
       {/* Stats Section */}
-      <section ref={statsRef} className="py-20 bg-white">
+      <section ref={statsRef} className="py-20 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
@@ -572,17 +606,17 @@ const AboutUsPage = () => {
                 variants={zoomIn(index * 0.2, 1)}
                 className="text-center group"
               >
-                <div className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-gray-100">
-                  <div className="bg-burnt-orange bg-opacity-10 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 border border-cream">
+                  <div className="bg-burnt-orange/10 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                     <stat.icon className="text-burnt-orange text-3xl" />
                   </div>
-                  <div className="text-4xl font-bold text-gray-900 mb-2">
+                  <div className="text-4xl font-bold text-gray-800 mb-2">
                     {isVisible && (
                       <CountUp
                         end={stat.number}
                         suffix={stat.suffix}
                         duration={3}
-                        className="bg-gradient-to-r from-burnt-orange to-orange-600 bg-clip-text text-transparent"
+                        className="text-burnt-orange"
                       />
                     )}
                   </div>
@@ -597,7 +631,7 @@ const AboutUsPage = () => {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-20 bg-gradient-to-br from-gray-900 to-burnt-orange text-white">
+      <section className="py-20 bg-burnt-orange text-white" id="vision">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <motion.div
@@ -615,7 +649,7 @@ const AboutUsPage = () => {
                 architectural solutions that enhance the quality of life while
                 respecting the environment. We strive to push the boundaries of
                 design while maintaining functionality, beauty, and timeless
-                elegance in every project we undertake.
+                elegance.
               </p>
             </motion.div>
 
@@ -633,8 +667,7 @@ const AboutUsPage = () => {
                 To be the world's most innovative architecture firm, recognized
                 for transforming urban landscapes through sustainable practices
                 and cutting-edge design. We envision a future where architecture
-                and nature coexist in perfect harmony, creating spaces that
-                inspire and endure for generations to come.
+                and nature coexist in perfect harmony.
               </p>
             </motion.div>
           </div>
@@ -648,8 +681,8 @@ const AboutUsPage = () => {
             variants={fadeIn("up", "spring", 0.3, 1)}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Our Values
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+              Our Core Values
             </h2>
             <div className="w-24 h-1 bg-burnt-orange mx-auto mb-6"></div>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -666,14 +699,14 @@ const AboutUsPage = () => {
                 whileHover={{ y: -10 }}
                 className="group"
               >
-                <div
-                  className={`bg-gradient-to-br ${value.color} text-white rounded-2xl p-8 h-full transform transition-all duration-300 group-hover:scale-105 shadow-lg group-hover:shadow-2xl`}
-                >
-                  <div className="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
-                    <value.icon className="text-white text-2xl" />
+                <div className="bg-cream rounded-2xl p-8 h-full transform transition-all duration-300 group-hover:scale-105 shadow-lg group-hover:shadow-xl border border-cream hover:border-burnt-orange/20">
+                  <div className="bg-burnt-orange/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
+                    <value.icon className="text-burnt-orange text-2xl" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-4">{value.title}</h3>
-                  <p className="text-white/90 leading-relaxed">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                    {value.title}
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed">
                     {value.description}
                   </p>
                 </div>
@@ -684,13 +717,13 @@ const AboutUsPage = () => {
       </section>
 
       {/* Team Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-cream" id="team">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             variants={fadeIn("up", "spring", 0.3, 1)}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
               Meet Our Architects
             </h2>
             <div className="w-24 h-1 bg-burnt-orange mx-auto mb-6"></div>
@@ -706,10 +739,10 @@ const AboutUsPage = () => {
               <motion.div
                 key={index}
                 variants={fadeIn("up", "spring", index * 0.2, 1)}
-                whileHover={{ y: -15 }}
+                whileHover={{ y: -10 }}
                 className="group"
               >
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-300 group-hover:shadow-2xl">
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 group-hover:shadow-xl border border-cream">
                   <div className="h-80 overflow-hidden relative">
                     <img
                       src={member.image}
@@ -719,7 +752,7 @@ const AboutUsPage = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">
                       {member.name}
                     </h3>
                     <p className="text-burnt-orange font-semibold mb-3">
@@ -732,7 +765,7 @@ const AboutUsPage = () => {
                       {member.specialties.map((specialty, idx) => (
                         <span
                           key={idx}
-                          className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium"
+                          className="bg-cream text-gray-700 px-3 py-1 rounded-full text-xs font-medium"
                         >
                           {specialty}
                         </span>
@@ -747,7 +780,7 @@ const AboutUsPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-burnt-orange to-orange-600">
+      <section className="py-20 bg-burnt-orange">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <motion.div
             variants={fadeIn("up", "spring", 0.3, 1)}
@@ -760,16 +793,41 @@ const AboutUsPage = () => {
               Let's collaborate to create something extraordinary. Schedule a
               consultation with our team today.
             </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-white text-[#BE5103] px-8 py-4 rounded-lg text-lg font-semibold transition-colors hover:bg-gray-100 shadow-2xl"
-            >
-              Start Your Journey
-            </motion.button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-white text-burnt-orange px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 hover:bg-gray-50 shadow-lg"
+              >
+                Start Your Journey
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 hover:bg-white hover:text-burnt-orange"
+              >
+                View Our Work
+              </motion.button>
+            </div>
           </motion.div>
         </div>
       </section>
+
+      {/* Custom Styles */}
+      <style jsx>{`
+        .bg-cream {
+          background-color: #fefaf6;
+        }
+        .text-burnt-orange {
+          color: #be5103;
+        }
+        .bg-burnt-orange {
+          background-color: #be5103;
+        }
+        .border-burnt-orange {
+          border-color: #be5103;
+        }
+      `}</style>
     </motion.div>
   );
 };
