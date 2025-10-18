@@ -3,82 +3,101 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Str;
 
 class Project extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'name',
         'slug',
         'category',
         'sub_category',
-        'style',
         'type',
+        'style',
         'description',
         'short_description',
         'full_description',
         'concept',
         'design_philosophy',
+        'highlights',
+        'awards', 
         'location',
         'year',
         'area',
         'budget',
         'duration',
-        'main_image',
         'images',
         'before_after',
         'videos',
-        'highlights',
+        'team',
+        'testimonials',
         'tags',
-        'featured',
-        'is_active',
-        'sort_order',
+        'is_featured',
+        'is_published',
+        'order_column',
     ];
 
     protected $casts = [
-        'featured' => 'boolean',
-        'is_active' => 'boolean',
+        'highlights' => 'array',
+        'awards' => 'array', // Cast awards as array
         'images' => 'array',
         'before_after' => 'array',
         'videos' => 'array',
-        'highlights' => 'array',
+        'team' => 'array',
+        'testimonials' => 'array',
         'tags' => 'array',
-        'year' => 'string',
-        'sort_order' => 'integer',
+        'is_featured' => 'boolean',
+        'is_published' => 'boolean',
+        'year' => 'integer',
+        'order_column' => 'integer',
     ];
 
-    // Relationships
-    public function team()
+    protected static function boot()
     {
-        return $this->hasMany(ProjectTeam::class)->orderBy('sort_order');
+        parent::boot();
+
+        static::creating(function ($project) {
+            if (empty($project->slug)) {
+                $project->slug = Str::slug($project->name);
+            }
+        });
     }
 
-    public function testimonials()
+    // Helper method to check if project has awards
+    public function hasAwards(): bool
     {
-        return $this->hasMany(ProjectTestimonial::class)->where('is_active', true)->orderBy('sort_order');
+        return !empty($this->awards) && count($this->awards) > 0;
     }
 
-    public function awards()
+    // Helper method to get featured awards
+    public function getFeaturedAwards()
     {
-        return $this->belongsToMany(Award::class, 'project_awards')->withTimestamps();
+        if (!$this->hasAwards()) {
+            return collect();
+        }
+
+        return collect($this->awards)->filter(function ($award) {
+            return $award['featured'] ?? false;
+        });
     }
 
-    // Scopes
-    public function scopeActive($query)
+    public function scopePublished($query)
     {
-        return $query->where('is_active', true);
+        return $query->where('is_published', true);
     }
 
     public function scopeFeatured($query)
     {
-        return $query->where('featured', true);
+        return $query->where('is_featured', true);
     }
 
-    public function scopeByCategory($query, $category)
+    public function scopeHasAwards($query)
+    {
+        return $query->whereNotNull('awards')->where('awards', '!=', '[]');
+    }
+
+    public function scopeByCategory($query, $category = null)
     {
         if ($category && $category !== 'all') {
             return $query->where('category', $category);
@@ -86,7 +105,7 @@ class Project extends Model
         return $query;
     }
 
-    public function scopeBySubCategory($query, $subCategory)
+    public function scopeBySubCategory($query, $subCategory = null)
     {
         if ($subCategory && $subCategory !== 'all') {
             return $query->where('sub_category', $subCategory);
@@ -94,10 +113,18 @@ class Project extends Model
         return $query;
     }
 
-    public function scopeByStyle($query, $style)
+    public function scopeByType($query, $type = null)
+    {
+        if ($type && $type !== 'all') {
+            return $query->where('type', $type);
+        }
+        return $query;
+    }
+
+    public function scopeByStyle($query, $style = null)
     {
         if ($style && $style !== 'all') {
-            return $query->where('style', 'like', "%{$style}%");
+            return $query->where('style', $style);
         }
         return $query;
     }
@@ -109,46 +136,10 @@ class Project extends Model
                 $q->where('name', 'like', "%{$searchTerm}%")
                   ->orWhere('description', 'like', "%{$searchTerm}%")
                   ->orWhere('short_description', 'like', "%{$searchTerm}%")
-                  ->orWhereJsonContains('tags', $searchTerm);
+                  ->orWhereJsonContains('tags', $searchTerm)
+                  ->orWhereJsonContains('awards', ['name' => $searchTerm]);
             });
         }
         return $query;
-    }
-
-    public function scopeOrdered($query)
-    {
-        return $query->orderBy('sort_order')->orderBy('created_at', 'desc');
-    }
-
-    // Accessors
-    protected function mainImage(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value ? asset('uploads/' . $value) : null,
-        );
-    }
-
-    protected function images(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => collect(json_decode($value, true) ?? [])
-                ->map(fn ($image) => asset('uploads/' . $image))
-                ->toArray(),
-        );
-    }
-
-    protected function beforeAfter(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => collect(json_decode($value, true) ?? [])
-                ->map(function ($item) {
-                    return [
-                        'before' => asset('uploads/' . $item['before']),
-                        'after' => asset('uploads/' . $item['after']),
-                        'caption' => $item['caption'] ?? '',
-                    ];
-                })
-                ->toArray(),
-        );
     }
 }

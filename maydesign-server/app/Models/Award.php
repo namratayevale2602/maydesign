@@ -56,7 +56,10 @@ class Award extends Model
             set: fn ($value) => json_encode($value),
         );
     }
-
+public function projects()
+{
+    return $this->belongsToMany(Project::class, 'project_awards')->withTimestamps();
+}
     // Scopes
     public function scopeActive($query)
     {

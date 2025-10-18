@@ -153,7 +153,7 @@ export const fetchFeaturedPressAPI = async (params = {}) => {
 export const fetchAwardsAPI = async (params = {}) => {
   try {
     if (typeof window !== "undefined") {
-      console.log(`🏆 Fetching Awards...`, params);
+      console.log(`Fetching Awards...`, params);
     }
     const response = await api.get("/awards", { params });
     return logResponse("/awards", response.data);
@@ -165,7 +165,7 @@ export const fetchAwardsAPI = async (params = {}) => {
 export const fetchFeaturedAwardsAPI = async (params = {}) => {
   try {
     if (typeof window !== "undefined") {
-      console.log(`🏆 Fetching Featured Awards...`);
+      console.log(`etching Featured Awards...`);
     }
     const response = await api.get("/awards/featured", { params });
     return logResponse("/awards/featured", response.data);
@@ -177,12 +177,198 @@ export const fetchFeaturedAwardsAPI = async (params = {}) => {
 export const fetchAwardYearsAPI = async () => {
   try {
     if (typeof window !== "undefined") {
-      console.log(`📅 Fetching Award Years...`);
+      console.log(`Fetching Award Years...`);
     }
     const response = await api.get("/awards/years");
     return logResponse("/awards/years", response.data);
   } catch (error) {
     return logError("/awards/years", error);
+  }
+};
+
+// Projects API calls
+export const fetchProjectsAPI = async (params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`🏗️ Fetching Projects...`, params);
+    }
+    const response = await api.get("/projects", { params });
+    return logResponse("/projects", response.data);
+  } catch (error) {
+    return logError("/projects", error);
+  }
+};
+
+export const fetchFeaturedProjectsAPI = async (params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`⭐ Fetching Featured Projects...`, params);
+    }
+    const response = await api.get("/projects/featured", { params });
+    return logResponse("/projects/featured", response.data);
+  } catch (error) {
+    return logError("/projects/featured", error);
+  }
+};
+
+export const fetchProjectCategoriesAPI = async (params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`📂 Fetching Project Categories...`, params);
+    }
+    const response = await api.get("/projects/categories", { params });
+    return logResponse("/projects/categories", response.data);
+  } catch (error) {
+    return logError("/projects/categories", error);
+  }
+};
+
+export const fetchProjectByIdAPI = async (id, params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`📋 Fetching Project ${id}...`, params);
+    }
+    const response = await api.get(`/projects/${id}`, { params });
+    return logResponse(`/projects/${id}`, response.data);
+  } catch (error) {
+    return logError(`/projects/${id}`, error);
+  }
+};
+
+export const fetchProjectBySlugAPI = async (slug, params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`📋 Fetching Project by Slug: ${slug}...`, params);
+    }
+    const response = await api.get(`/projects/slug/${slug}`, { params });
+    return logResponse(`/projects/slug/${slug}`, response.data);
+  } catch (error) {
+    return logError(`/projects/slug/${slug}`, error);
+  }
+};
+
+export const fetchProjectsByCategoryAPI = async (category, params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`🏷️ Fetching ${category} Projects...`, params);
+    }
+    const response = await api.get(`/projects/category/${category}`, {
+      params,
+    });
+    return logResponse(`/projects/category/${category}`, response.data);
+  } catch (error) {
+    return logError(`/projects/category/${category}`, error);
+  }
+};
+
+export const fetchCategoryTypesAPI = async (category, params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`📊 Fetching ${category} Types...`, params);
+    }
+    const response = await api.get(`/projects/category/${category}/types`, {
+      params,
+    });
+    return logResponse(`/projects/category/${category}/types`, response.data);
+  } catch (error) {
+    return logError(`/projects/category/${category}/types`, error);
+  }
+};
+
+export const fetchInteriorByTypeAPI = async (type, params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`🏠 Fetching ${type} Interior Projects...`, params);
+    }
+    const response = await api.get(`/projects/interior/${type}`, { params });
+    return logResponse(`/projects/interior/${type}`, response.data);
+  } catch (error) {
+    return logError(`/projects/interior/${type}`, error);
+  }
+};
+
+export const fetchProjectYearsAPI = async () => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`📅 Fetching Project Years...`);
+    }
+    const response = await api.get("/projects/years");
+    return logResponse("/projects/years", response.data);
+  } catch (error) {
+    return logError("/projects/years", error);
+  }
+};
+
+export const fetchProjectStatsAPI = async () => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`📊 Fetching Project Stats...`);
+    }
+    const response = await api.get("/projects/stats");
+    return logResponse("/projects/stats", response.data);
+  } catch (error) {
+    return logError("/projects/stats", error);
+  }
+};
+
+export const fetchSimilarProjectsAPI = async (projectId) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`🔍 Fetching Similar Projects for ${projectId}...`);
+    }
+    const response = await api.get(`/projects/${projectId}/similar`);
+    return logResponse(`/projects/${projectId}/similar`, response.data);
+  } catch (error) {
+    return logError(`/projects/${projectId}/similar`, error);
+  }
+};
+
+// Awards API calls
+// export const fetchAwardsAPI = async (params = {}) => {
+//   try {
+//     if (typeof window !== "undefined") {
+//       console.log(`🏆 Fetching Awards...`, params);
+//     }
+//     const response = await api.get("/awards", { params });
+//     return logResponse("/awards", response.data);
+//   } catch (error) {
+//     return logError("/awards", error);
+//   }
+// };
+
+// export const fetchFeaturedAwardsAPI = async () => {
+//   try {
+//     if (typeof window !== "undefined") {
+//       console.log(`⭐ Fetching Featured Awards...`);
+//     }
+//     const response = await api.get("/awards/featured");
+//     return logResponse("/awards/featured", response.data);
+//   } catch (error) {
+//     return logError("/awards/featured", error);
+//   }
+// };
+
+// export const fetchAwardYearsAPI = async () => {
+//   try {
+//     if (typeof window !== "undefined") {
+//       console.log(`📅 Fetching Award Years...`);
+//     }
+//     const response = await api.get("/awards/years");
+//     return logResponse("/awards/years", response.data);
+//   } catch (error) {
+//     return logError("/awards/years", error);
+//   }
+// };
+
+export const fetchAboutUsAPI = async (endpoint, params = {}) => {
+  try {
+    if (typeof window !== "undefined") {
+      console.log(`🔗 Fetching ${endpoint}...`);
+    }
+    const response = await api.get(endpoint, { params });
+    return logResponse(endpoint, response.data);
+  } catch (error) {
+    return logError(endpoint, error);
   }
 };
 

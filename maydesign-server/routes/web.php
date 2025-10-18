@@ -9,7 +9,8 @@ use App\Http\Controllers\Api\AboutSectionController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\PressController;
 use App\Http\Controllers\Api\AwardController;
-use App\Http\Controllers\Api\ProjectCategoryController;
+use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\AboutUsController;
 
 
 Route::prefix('api')->group(function () {
@@ -32,13 +33,21 @@ Route::prefix('api')->group(function () {
     Route::get('/awards/featured', [AwardController::class, 'featured']);
     Route::get('/awards/years', [AwardController::class, 'years']);
     Route::get('/awards/{id}', [AwardController::class, 'show']);
-    Route::get('/projects', [ProjectCategoryController::class, 'index']);
-Route::get('/projects/featured', [ProjectCategoryController::class, 'featured']);
-Route::get('/projects/categories', [ProjectCategoryController::class, 'categories']);
-Route::get('/projects/{slug}', [ProjectCategoryController::class, 'show']);
+   // Projects routes
+    Route::get('/projects', [ProjectController::class, 'index']);
+    Route::get('/projects/featured', [ProjectController::class, 'featured']);
+    Route::get('/projects/categories', [ProjectController::class, 'categories']);
+    Route::get('/projects/years', [ProjectController::class, 'years']);
+    Route::get('/projects/{id}', [ProjectController::class, 'show']);
+    Route::get('/projects/slug/{slug}', [ProjectController::class, 'showBySlug']);
+    Route::get('/projects/{id}/similar', [ProjectController::class, 'similar']);
+    Route::get('/projects/category/{category}', [ProjectController::class, 'byCategory']);
+    Route::get('/projects/stats', [ProjectController::class, 'stats']);
+    
+    Route::get('about-us/mission-vision', [AboutUsController::class, 'missionVision']);
+    Route::get('about-us/team', [AboutUsController::class, 'team']);
+    Route::get('about-us/values', [AboutUsController::class, 'values']);
+    Route::get('about-us/timeline', [AboutUsController::class, 'timeline']);
+    Route::get('about-us/all', [AboutUsController::class, 'allSections']);
 
-// Category-based project routes
-Route::get('/projects/category/{category}', [ProjectCategoryController::class, 'byCategory']);
-Route::get('/projects/category/{category}/types', [ProjectCategoryController::class, 'categoryTypes']);
-Route::get('/projects/interior/{type}', [ProjectCategoryController::class, 'interiorByType']);
 });
